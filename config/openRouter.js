@@ -10,7 +10,7 @@ export const generateResponse = async (prompt) => {
             messages: [
                 {
                     role: "system",
-                    content: "You must return only valid raw json"
+                    content: "You are a strict JSON-only generator. Never include introductory text, explanations, or markdown code blocks (like ```json). Respond with a single, pure JSON object and nothing else."
                 },
                 {
                     role: 'user',
