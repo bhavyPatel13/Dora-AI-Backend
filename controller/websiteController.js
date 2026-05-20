@@ -187,16 +187,18 @@ export const generateWebite = async (req, res) => {
             }
         }
 
-        if (!parsed.code) {
+        if (!parsed || !parsed.code) {
             return res.status(400).json({
-                message: "AI returned invalid responce"
+                message: "AI returned invalid response"
             })
         }
+
+        const cleanCode = parsed.code.replace(/\\"/g, '"');
 
         const website = await Website.create({
             user: user._id,
             title: prompt.slice(0, 60),
-            latestCode: parsed.code,
+            latestCode: cleanCode,
             conversation: [
                 {
                     role: "user",
@@ -356,7 +358,7 @@ export const changeWebsite = async (req, res) => {
 export const deployWebsite = async (req, res) => {
     try {
         const website = await Website.findOne({
-            _id : req.params.id,
+            _id: req.params.id,
             user: req.user._id
         });
         if (!website) {
@@ -386,12 +388,12 @@ export const deployWebsite = async (req, res) => {
 export const getBySlug = async (req, res) => {
     try {
         const website = await Website.findOne({
-            slug : req.params.slug
+            slug: req.params.slug
         })
 
         if (!website) {
             return res.status(400).json({
-                message : "Website not found"
+                message: "Website not found"
             })
         }
 
